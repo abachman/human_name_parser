@@ -22,6 +22,12 @@ With code borrowed from:
     name.suffix   # => 'Jr.'
     name.to_s     # => 'George W. Bush Jr.'
 
+## Development
+
+    ~/ $ git clone ... && cd human_name_parser
+    ~/ $ bundle install
+    ~/ $ rake
+
 ## TODO
 
 Handle nicknames
