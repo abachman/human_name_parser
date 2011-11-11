@@ -1,7 +1,7 @@
 module HumanNameParser
   class Name
     PREFIXES = ['mr', 'ms', 'miss', 'mrs', 'sir', 'prof', 'professor', 'md', 'dr']
-    SUFFIXES = ['esq','esquire','jr','sr','2','ii','iii','iv']
+    SUFFIXES = ['esq','esquire','jr','sr','2','ii','iii','iv', 'v', 'phd', 'md', 'do', 'dc', 'dds']
     LAST_PREFIXES = ['al', 'bar','ben','bin','da','dal','de la', 'de', 'del', 'der', 'di', 'el', 'ibn', 'la', 'le', 'mc', 'san', 'st', 'ste', 'van', 'van der', 'van den', 'vel','von']
 
     attr_accessor :first, :middle, :last, :prefix, :suffix
@@ -27,7 +27,7 @@ module HumanNameParser
         self.last  = ''
       elsif @split_name.length == 2
         _first, _last = @split_name
-        self.first = _first
+        self.first = _firstjk
         self.last  = _last
       else
         parse_prefix.

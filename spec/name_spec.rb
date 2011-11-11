@@ -12,6 +12,17 @@ describe HumanNameParser::Name do
     end
   end
 
+  context "when full name is Marley Mante PhD" do
+    let(:full_name) { "Marley Mante PhD" }
+    it "should parse the name" do
+      @name = HumanNameParser::Name.new full_name
+      @name.first.should == 'Marley'
+      @name.last.should == 'Mante'
+      @name.middle.should == ''
+      @name.suffix.should == 'PhD'
+    end
+  end
+
   context 'when full name is Mary Lou Smith' do
     let(:full_name) { "Mary Lou Smith" }
     before do
