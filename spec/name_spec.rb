@@ -23,6 +23,28 @@ describe HumanNameParser::Name do
     end
   end
 
+  context "when full name is Marley Mante" do
+    let(:full_name) { "Marley Mante" }
+    it "should parse the name" do
+      @name = HumanNameParser::Name.new full_name
+      @name.first.should == 'Marley'
+      @name.last.should == 'Mante'
+      @name.middle.should == ''
+      @name.suffix.should == ''
+    end
+  end
+
+  context "when full name is Marley" do
+    let(:full_name) { "Marley" }
+    it "should parse the name" do
+      @name = HumanNameParser::Name.new full_name
+      @name.first.should == 'Marley'
+      @name.last.should == ''
+      @name.middle.should == ''
+      @name.suffix.should == ''
+    end
+  end
+
   context 'when full name is Mary Lou Smith' do
     let(:full_name) { "Mary Lou Smith" }
     before do
@@ -35,6 +57,10 @@ describe HumanNameParser::Name do
 
     it "gets last name" do
       @name.last.should == 'Smith'
+    end
+
+    it "gets middle" do
+      @name.middle.should == 'Lou'
     end
 
     it "gets prefix" do
@@ -89,27 +115,6 @@ describe HumanNameParser::Name do
 
     it "doesn't get last" do
       @name.last.should == ''
-    end
-  end
-
-  context 'when full name is John Paul Ringo' do
-    let(:full_name) { "John Paul Ringo" }
-    before { @name = HumanNameParser::Name.new full_name }
-
-    it "gets first" do
-      @name.first.should == 'John'
-    end
-
-    it 'gets initials' do
-      @name.initials.should == 'JPR'
-    end
-
-    it "gets last" do
-      @name.last.should == 'Ringo'
-    end
-
-    it "gets middle" do
-      @name.middle.should == 'Paul'
     end
   end
 

@@ -27,7 +27,7 @@ module HumanNameParser
         self.last  = ''
       elsif @split_name.length == 2
         _first, _last = @split_name
-        self.first = _firstjk
+        self.first = _first
         self.last  = _last
       else
         parse_prefix.
