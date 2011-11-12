@@ -106,12 +106,22 @@ module HumanNameParser
         # this is a thing that I cannot recognize
         @split_name = []
       elsif @input_string.count(",") == 1
-        @split_name = split_last_comma_first_middle
+        if suffix_follows_comma?(@input_string)
+          # remove commas from the split
+          @split_name = split_first_middle_last.map {|n| n.gsub(',', '')}
+        else
+          @split_name = split_last_comma_first_middle
+        end
       else
         @split_name = split_first_middle_last
       end
 
       return self
+    end
+
+    # check whether each part is a suffix
+    def suffix_follows_comma? name
+      name.split(',')[1].split(' ').all? {|part| is_suffix?(part)}
     end
 
     def split_last_comma_first_middle
