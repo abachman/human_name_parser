@@ -1,181 +1,47 @@
 require 'human_name_parser/name'
 
+NAMES = [
+  ['', ['', '', '', '', '', '']],
+  ['Downey, Robert Jr.', ['Robert', '', 'Downey', '', 'Jr.', 'RD']],
+  ['Mr. Alphonse di Morel Jr. Esq.', ['Alphonse', '', 'di Morel', 'Mr.', 'Jr. Esq.', 'AD']],
+  ['Mary Lou Smith', ['Mary', 'Lou', 'Smith', '', '', 'MLS']],
+  ['Marley', ['Marley', '', '', '', '', 'M']],
+  ['Marley Mante', ['Marley', '', 'Mante', '', '', 'MM']],
+  ['Marley Mante PhD', ['Marley', '', 'Mante', '', 'PhD', 'MM']],
+  ['Marley Mante, esq.', ['Marley', '', 'Mante', '', 'esq.', 'MM']],
+  ["Björn Charles van der O'Malley", ['Björn', 'Charles', "van der O'Malley", '', '', 'BCV']],
+  ['Alex Rothlenson-ben-Elsburghmohampton', ['Alex', '', 'Rothlenson-ben-Elsburghmohampton', '', '', 'AR']],
+  ['1234 Anywhere St., North Pole, SD 22323', ['', '', '', '', '', '']]
+]
+
 describe HumanNameParser::Name do
-  # any unicode issues?
-  context "when full name is Björn Charles van der O'Malley" do
-    let(:full_name) { "Björn Charles van der O'Malley" }
-    it "should parse the name" do
-      @name = HumanNameParser::Name.new full_name
-      @name.first.should == 'Björn'
-      @name.last.should == "van der O'Malley"
-      @name.middle.should == 'Charles'
-    end
-  end
+  NAMES.each do |name_array|
+    context "when full name is #{ name_array.first.inspect }" do
+      before { @name = HumanNameParser::Name.new name_array.first }
 
-  context "when full name is Marley Mante PhD" do
-    let(:full_name) { "Marley Mante PhD" }
-    it "should parse the name" do
-      @name = HumanNameParser::Name.new full_name
-      @name.first.should == 'Marley'
-      @name.last.should == 'Mante'
-      @name.middle.should == ''
-      @name.suffix.should == 'PhD'
-    end
-  end
+      it "gets first name" do
+        @name.first.should == name_array[1][0]
+      end
 
-  context "when full name is Marley Mante" do
-    let(:full_name) { "Marley Mante" }
-    it "should parse the name" do
-      @name = HumanNameParser::Name.new full_name
-      @name.first.should == 'Marley'
-      @name.last.should == 'Mante'
-      @name.middle.should == ''
-      @name.suffix.should == ''
-    end
-  end
+      it "gets middle name" do
+        @name.middle.should == name_array[1][1]
+      end
 
-  context "when full name is Marley" do
-    let(:full_name) { "Marley" }
-    it "should parse the name" do
-      @name = HumanNameParser::Name.new full_name
-      @name.first.should == 'Marley'
-      @name.last.should == ''
-      @name.middle.should == ''
-      @name.suffix.should == ''
-    end
-  end
+      it "gets last name" do
+        @name.last.should == name_array[1][2]
+      end
 
-  context "when full name is Marley Mante, esq." do
-    let(:full_name) { "Marley Mante, esq." }
-    it "should parse the name" do
-      @name = HumanNameParser::Name.new full_name
-      @name.first.should == 'Marley'
-      @name.last.should == 'Mante'
-      @name.middle.should == ''
-      @name.suffix.should == 'esq.'
-    end
-  end
+      it "gets prefix" do
+        @name.prefix.should == name_array[1][3]
+      end
 
-  context 'when full name is Mary Lou Smith' do
-    let(:full_name) { "Mary Lou Smith" }
-    before do
-      @name = HumanNameParser::Name.new full_name
-    end
+      it "gets suffix" do
+        @name.suffix.should == name_array[1][4]
+      end
 
-    it "gets first name" do
-      @name.first.should == 'Mary'
-    end
-
-    it "gets last name" do
-      @name.last.should == 'Smith'
-    end
-
-    it "gets middle" do
-      @name.middle.should == 'Lou'
-    end
-
-    it "gets prefix" do
-      @name.prefix.should == ''
-    end
-
-    it "gets suffix" do
-      @name.suffix.should == ''
-    end
-
-    it "gets initials" do
-      @name.initials.should == 'MLS'
-    end
-  end
-
-  context 'when full name is Mr. Alphonse di Morel Jr. Esq.' do
-    let(:full_name) { "Mr. Alphonse di Morel Jr. Esq." }
-    before { @name = HumanNameParser::Name.new full_name }
-
-    it "gets first" do
-      @name.first.should == 'Alphonse'
-    end
-
-    it "gets last" do
-      @name.last.should == 'di Morel'
-    end
-
-    it "gets prefix" do
-      @name.prefix.should == 'Mr.'
-    end
-
-    it "gets suffix" do
-      @name.suffix.should == 'Jr. Esq.'
-    end
-
-    it "gets initials" do
-      @name.initials.should == 'AD'
-    end
-  end
-
-  context 'when full name is ROBOTO' do
-    let(:full_name) { "ROBOTO" }
-    before { @name = HumanNameParser::Name.new full_name }
-
-    it "gets first" do
-      @name.first.should == 'ROBOTO'
-    end
-
-    it 'gets initials' do
-      @name.initials.should == 'R'
-    end
-
-    it "doesn't get last" do
-      @name.last.should == ''
-    end
-  end
-
-  context 'when full name is Downey Jr., Robert' do
-    let(:full_name) { 'Downey Jr., Robert' }
-    before { @name = HumanNameParser::Name.new full_name }
-
-    it "gets first" do
-      @name.first.should == 'Robert'
-    end
-
-    it 'gets initials' do
-      @name.initials.should == 'RD'
-    end
-
-    it "gets last" do
-      @name.last.should == 'Downey'
-    end
-
-    it "gets middle" do
-      @name.middle.should == ''
-    end
-
-    it "gets suffix" do
-      @name.suffix.should == 'Jr.'
-    end
-  end
-
-  context 'when full name is garbage' do
-    let(:full_name) { '1234 Anywhere St., North Pole, SD 22323' }
-    before { @name = HumanNameParser::Name.new full_name }
-
-    it "gets first" do
-      @name.first.should == ''
-    end
-
-    it 'gets initials' do
-      @name.initials.should == ''
-    end
-
-    it "gets last" do
-      @name.last.should == ''
-    end
-
-    it "gets middle" do
-      @name.middle.should == ''
-    end
-
-    it "gets suffix" do
-      @name.suffix.should == ''
+      it "gets initials" do
+        @name.initials.should == name_array[1][5]
+      end
     end
   end
 end

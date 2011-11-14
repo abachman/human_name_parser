@@ -1,7 +1,7 @@
 module HumanNameParser
   class Name
     PREFIXES = ['mr', 'ms', 'miss', 'mrs', 'sir', 'prof', 'professor', 'md', 'dr']
-    SUFFIXES = ['esq','esquire','jr','sr','2','ii','iii','iv', 'v', 'phd', 'md', 'do', 'dc', 'dds']
+    SUFFIXES = ['esq','esquire','jr','sr','2', 'i', 'ii','iii','iv', 'v', 'phd', 'md', 'do', 'dc', 'dds']
     LAST_PREFIXES = ['al', 'bar','ben','bin','da','dal','de la', 'de', 'del', 'der', 'di', 'el', 'ibn', 'la', 'le', 'mc', 'san', 'st', 'ste', 'van', 'van der', 'van den', 'vel','von']
 
     attr_accessor :first, :middle, :last, :prefix, :suffix
@@ -128,9 +128,18 @@ module HumanNameParser
       match = @input_string.match(",")
       normalized = ""
       if match
-        normalized = [match.post_match.strip, match.pre_match.strip].join(" ")
+        normalized_first, normalized_last = [match.post_match.strip, match.pre_match.strip]
+
+        # in case suffix follows right side of comma
+        split_right_side = normalized_first.split(' ')
+        while is_suffix?(split_right_side.last)
+          normalized_last += ' ' + split_right_side.pop
+
+          # prune suffix from first name group
+          normalized_first = split_right_side.join(' ')
+        end
       end
-      normalized.split(" ")
+      [normalized_first, normalized_last].map {|n| n.split(" ")}.flatten
     end
 
     def split_first_middle_last
