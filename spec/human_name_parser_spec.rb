@@ -6,10 +6,16 @@ describe HumanNameParser do
     name.class.should == HumanNameParser::Name
   end
 
+  it "returns nil when given nil" do
+    problem = nil
+    name = HumanNameParser.parse problem
+    name.should == problem
+  end
+
   it "parses names" do
     name = HumanNameParser.parse "John H. Smith"
-    name.first.should == 'John'
-    name.last.should == 'Smith'
-    name.initials.should == 'JHS'
+    name.first.should eq 'John'
+    name.last.should eq 'Smith'
+    name.initials.should eq 'JHS'
   end
 end
