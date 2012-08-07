@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'human_name_parser/name'
 
 NAMES = [
