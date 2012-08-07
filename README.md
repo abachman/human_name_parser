@@ -1,10 +1,12 @@
-Attempt to parse and categorize the parts of names.
+Attempt to parse and categorize the parts of names. Almost entirely focused on "western" style names.
 
 With code borrowed from:
 
 * https://github.com/bricooke/name_parser
 * https://github.com/jasonpriem/HumanNameParser.php
 * https://github.com/jconley88/NameParser
+
+Built for use in [Tixato](http://tixato.com) by [Figure 53](http://figure53.com).
 
 ## Install
 
