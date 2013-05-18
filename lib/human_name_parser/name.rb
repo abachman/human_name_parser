@@ -3,6 +3,7 @@ module HumanNameParser
     PREFIXES = ['mr', 'ms', 'miss', 'mrs', 'sir', 'prof', 'professor', 'md', 'dr']
     SUFFIXES = ['esq','esquire','jr','sr','2', 'i', 'ii','iii','iv', 'v', 'phd', 'md', 'do', 'dc', 'dds']
     LAST_PREFIXES = ['al', 'bar','ben','bin','da','dal','de la', 'de', 'del', 'der', 'di', 'el', 'ibn', 'la', 'le', 'mc', 'san', 'st', 'ste', 'van', 'van der', 'van den', 'vel','von']
+    NAME_JOINERS = ['&', 'and']
 
     attr_accessor :first, :middle, :last, :prefix, :suffix
 
@@ -57,20 +58,23 @@ module HumanNameParser
     end
 
     def parse_last_name
-      self.last = []
-      self.last.unshift @split_name.pop
-
-      while is_last_name_prefix?(@split_name.last)
+      if !is_name_joiner? @split_name[-2]
+        self.last = []
         self.last.unshift @split_name.pop
-      end
 
-      self.last = self.last.join(' ')
+        while is_last_name_prefix?(@split_name.last)
+          self.last.unshift @split_name.pop
+        end
+
+        self.last = self.last.join(' ')
+      end
 
       return self
     end
 
     def parse_first_name
-      self.first = @split_name.shift || ''
+      shift_distance = is_name_joiner?(@split_name[1]) ? 3 : 1
+      self.first = @split_name.shift(shift_distance).join(' ')
 
       return self
     end
@@ -84,9 +88,9 @@ module HumanNameParser
 
     def initials
       _i = ''
-      _i += self.first.slice(0,1)  if self.first && self.first.length > 0
-      _i += self.middle.slice(0,1) if self.middle && self.middle.length > 0
-      _i += self.last.slice(0,1)   if self.last && self.last.length > 0
+      _i += self.first.slice(0,1)  if !blank?(self.first)
+      _i += self.middle.slice(0,1) if !blank?(self.middle)
+      _i += self.last.slice(0,1)   if !blank?(self.last)
       _i.upcase
     end
 
@@ -97,7 +101,7 @@ module HumanNameParser
         self.middle,
         self.last,
         self.suffix
-      ].reject {|n| n.length == 0}.join(' ')
+      ].reject( &method(:blank?) ).join(' ')
     end
 
   private
@@ -154,14 +158,22 @@ module HumanNameParser
       is_ix?(SUFFIXES, string)
     end
 
+    def is_name_joiner?(string)
+      is_ix?(NAME_JOINERS, string)
+    end
+
     def is_last_name_prefix?(string)
-      return false if string.nil? || string == ""
-      LAST_PREFIXES.any? { |p| string.downcase.match(/^#{p}$/) }
+      return false if blank?(string)
+      LAST_PREFIXES.include?(string.downcase)
     end
 
     def is_ix?(kind, string)
-      return false if string.nil? || string == ""
-      kind.any? {|k| string.downcase.match(/^#{k}\.?$/)}
+      return false if blank?(string)
+      kind.any? { |k| string =~ /\A#{k}\.?\z/i }
+    end
+
+    def blank?(string)
+      string.nil? || string == ''
     end
 
   end
