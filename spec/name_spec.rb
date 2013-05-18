@@ -10,6 +10,8 @@ NAMES = [
   ['Marley Mante', ['Marley', '', 'Mante', '', '', 'MM']],
   ['Marley Mante PhD', ['Marley', '', 'Mante', '', 'PhD', 'MM']],
   ['Marley Mante, esq.', ['Marley', '', 'Mante', '', 'esq.', 'MM']],
+  ['Amy and Brian Smith', ['Amy and Brian', '', 'Smith', '', '', 'AS']],
+  ['Amy & Brian', ['Amy & Brian', '', '', '', '', 'A']],
   ["Björn Charles van der O'Malley", ['Björn', 'Charles', "van der O'Malley", '', '', 'BCV']],
   ['Alex Rothlenson-ben-Elsburghmohampton', ['Alex', '', 'Rothlenson-ben-Elsburghmohampton', '', '', 'AR']],
   ['1234 Anywhere St., North Pole, SD 22323', ['', '', '', '', '', '']]
