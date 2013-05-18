@@ -44,7 +44,7 @@ module HumanNameParser
         self.prefix = @split_name.shift
       end
 
-      return self
+      self
     end
 
     def parse_suffix
@@ -54,7 +54,7 @@ module HumanNameParser
       end
       self.suffix = self.suffix.join(' ')
 
-      return self
+      self
     end
 
     def parse_last_name
@@ -69,21 +69,21 @@ module HumanNameParser
         self.last = self.last.join(' ')
       end
 
-      return self
+      self
     end
 
     def parse_first_name
       shift_distance = is_name_joiner?(@split_name[1]) ? 3 : 1
       self.first = @split_name.shift(shift_distance).join(' ')
 
-      return self
+      self
     end
 
     def parse_middle_name
       # whatever's left
       self.middle = @split_name.join ' '
 
-      return self
+      self
     end
 
     def initials
@@ -120,7 +120,7 @@ module HumanNameParser
         @split_name = split_first_middle_last
       end
 
-      return self
+      self
     end
 
     # check whether each part is a suffix
@@ -163,13 +163,11 @@ module HumanNameParser
     end
 
     def is_last_name_prefix?(string)
-      return false if blank?(string)
-      LAST_PREFIXES.include?(string.downcase)
+      !blank?(string) && LAST_PREFIXES.include?(string.downcase)
     end
 
     def is_ix?(kind, string)
-      return false if blank?(string)
-      kind.any? { |k| string =~ /\A#{k}\.?\z/i }
+      !blank?(string) && kind.any? { |k| string =~ /\A#{k}\.?\z/i }
     end
 
     def blank?(string)
